@@ -40,7 +40,7 @@ const SentinelHome = () => {
               <h1 className="text-2xl font-bold tracking-tight">Sentinel</h1>
             </div>
             <p className="text-muted-foreground text-sm leading-relaxed max-w-lg">
-              Carte d'anticipation humaine et environnementale. Observer, comprendre, anticiper — sans fausse promesse.
+              Réduire le temps d'isolement et orienter vers une aide humaine adaptée. Observer, comprendre, anticiper — sans fausse promesse.
             </p>
           </div>
           <Button variant="outline" size="sm" className="self-start sm:self-auto">
