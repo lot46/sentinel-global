@@ -3,8 +3,11 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import Index from "./pages/Index.tsx";
-import NotFound from "./pages/NotFound.tsx";
+import Index from "./pages/Index";
+import NotFound from "./pages/NotFound";
+import SentinelHome from "./apps/sentinel/SentinelHome";
+import JeSuisLaHome from "./apps/je-suis-la/JeSuisLaHome";
+import EchangeoHome from "./apps/echangeo/EchangeoHome";
 
 const queryClient = new QueryClient();
 
@@ -16,7 +19,9 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+          <Route path="/sentinel/*" element={<SentinelHome />} />
+          <Route path="/je-suis-la/*" element={<JeSuisLaHome />} />
+          <Route path="/echangeo/*" element={<EchangeoHome />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
