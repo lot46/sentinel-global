@@ -8,7 +8,7 @@
 
 | App | Chemin | Rôle |
 |-----|--------|------|
-| **Sentinel** | `/sentinel` | Surveillance citoyenne et alerte communautaire |
+| **Sentinel** | `/sentinel` | Protection citoyenne et anticipation communautaire |
 | **Je suis là** | `/je-suis-la` | Signal de présence pour personnes isolées |
 | **ÉCHANGEo** | `/echangeo` | Entraide locale entre voisins |
 
