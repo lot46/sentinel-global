@@ -144,6 +144,7 @@ const SentinelSOS = () => {
                   variant="outline"
                   className="border-level4/30"
                   onClick={cancel}
+                  aria-label="Annuler le signal SOS"
                 >
                   <ShieldOff className="w-4 h-4 mr-2" />
                   Annuler le SOS

@@ -24,6 +24,50 @@ interface StealthModeProps {
 
 const STEALTH_CODE = "911";
 
+/** Secure math evaluator — replaces Function()/eval to prevent XSS */
+function safeEvaluate(expr: string): number {
+  const sanitized = expr.replace(/[^0-9+\-*/().]/g, "");
+  if (!sanitized || sanitized.length > 50) throw new Error("Invalid");
+  // Tokenize and validate: only digits, operators, parens, dots
+  const tokens = sanitized.match(/(\d+\.?\d*|[+\-*/()])/g);
+  if (!tokens) throw new Error("Invalid");
+  // Rebuild and evaluate via recursive descent
+  let pos = 0;
+  const peek = () => tokens[pos] ?? "";
+  const consume = () => tokens[pos++];
+
+  function parseExpr(): number {
+    let result = parseTerm();
+    while (peek() === "+" || peek() === "-") {
+      const op = consume();
+      const right = parseTerm();
+      result = op === "+" ? result + right : result - right;
+    }
+    return result;
+  }
+  function parseTerm(): number {
+    let result = parseFactor();
+    while (peek() === "*" || peek() === "/") {
+      const op = consume();
+      const right = parseFactor();
+      result = op === "*" ? result * right : result / right;
+    }
+    return result;
+  }
+  function parseFactor(): number {
+    if (peek() === "(") {
+      consume();
+      const result = parseExpr();
+      consume(); // ")"
+      return result;
+    }
+    return parseFloat(consume());
+  }
+  const result = parseExpr();
+  if (!isFinite(result)) throw new Error("Invalid");
+  return Math.round(result * 1e10) / 1e10;
+}
+
 const StealthMode = ({ enabled, onSOSTriggered, onExit }: StealthModeProps) => {
   const [display, setDisplay] = useState("0");
   const [sosArmed, setSosArmed] = useState(false);
