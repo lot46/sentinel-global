@@ -106,8 +106,11 @@ const SentinelHome = () => {
 
             {/* Carte interactive */}
             <Card className={cn("overflow-hidden transition-colors duration-500", threat.borderClass)}>
-              <SentinelMap className="h-[280px] sm:h-[340px]" />
+              <SentinelMap className="h-[280px] sm:h-[400px]" layers={mapLayers} />
             </Card>
+
+            {/* Panneau de couches */}
+            <MapLayerPanel layers={mapLayers} onToggle={toggleLayer} />
 
             {/* Actions rapides */}
             <Card>
