@@ -39,6 +39,11 @@
     --app-jesuis: 340 65% 55%;
     --app-echangeo: 160 55% 40%;
 
+    /* Threat levels */
+    --level-2: 38 92% 50%;
+    --level-3: 25 95% 53%;
+    --level-4: 0 72% 51%;
+
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
     --sidebar-primary: 240 5.9% 10%;
