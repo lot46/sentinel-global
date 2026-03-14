@@ -1,9 +1,19 @@
-import { useEffect } from "react";
-import { MapContainer, TileLayer, Circle, Popup, useMap } from "react-leaflet";
+import { useEffect, useMemo } from "react";
+import {
+  MapContainer,
+  TileLayer,
+  Circle,
+  Marker,
+  Popup,
+  useMap,
+} from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-
-// Fix Leaflet default icon issue with bundlers
 import L from "leaflet";
+import { cn } from "@/lib/utils";
+import type { MapLayer } from "./map-data";
+import { DEMO_ZONES, DEMO_MARKERS } from "./map-data";
+
+// Fix default icon
 delete (L.Icon.Default.prototype as any)._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png",
@@ -11,34 +21,20 @@ L.Icon.Default.mergeOptions({
   shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
 });
 
-interface ZonePoint {
-  id: string;
-  name: string;
-  lat: number;
-  lng: number;
-  radius: number;
-  type: "safe" | "watch" | "alert";
+function createColoredIcon(color: string) {
+  return L.divIcon({
+    className: "sentinel-marker",
+    html: `<div style="
+      width: 12px; height: 12px; 
+      background: ${color}; 
+      border: 2px solid white; 
+      border-radius: 50%; 
+      box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+    "></div>`,
+    iconSize: [12, 12],
+    iconAnchor: [6, 6],
+  });
 }
-
-const DEMO_ZONES: ZonePoint[] = [
-  { id: "1", name: "Zone éclairée — Centre-ville", lat: 48.8566, lng: 2.3522, radius: 400, type: "safe" },
-  { id: "2", name: "Point d'appui — Gare du Nord", lat: 48.8809, lng: 2.3553, radius: 250, type: "safe" },
-  { id: "3", name: "Zone de vigilance — Barbès", lat: 48.8840, lng: 2.3495, radius: 300, type: "watch" },
-  { id: "4", name: "Zone éclairée — Bastille", lat: 48.8533, lng: 2.3695, radius: 350, type: "safe" },
-  { id: "5", name: "Point d'appui — République", lat: 48.8675, lng: 2.3638, radius: 200, type: "safe" },
-];
-
-const zoneColors: Record<string, string> = {
-  safe: "hsl(220, 70%, 50%)",
-  watch: "hsl(38, 92%, 50%)",
-  alert: "hsl(0, 72%, 51%)",
-};
-
-const zoneFills: Record<string, string> = {
-  safe: "hsl(220, 70%, 50%)",
-  watch: "hsl(38, 92%, 50%)",
-  alert: "hsl(0, 72%, 51%)",
-};
 
 function InvalidateSize() {
   const map = useMap();
@@ -50,13 +46,27 @@ function InvalidateSize() {
 
 interface SentinelMapProps {
   className?: string;
+  layers: MapLayer[];
 }
 
-const SentinelMap = ({ className }: SentinelMapProps) => {
+const SentinelMap = ({ className, layers }: SentinelMapProps) => {
+  const visibleLayerIds = useMemo(
+    () => new Set(layers.filter((l) => l.visible).map((l) => l.id)),
+    [layers]
+  );
+
+  const layerColorMap = useMemo(
+    () => Object.fromEntries(layers.map((l) => [l.id, l.color])),
+    [layers]
+  );
+
+  const filteredZones = DEMO_ZONES.filter((z) => visibleLayerIds.has(z.layerId));
+  const filteredMarkers = DEMO_MARKERS.filter((m) => visibleLayerIds.has(m.layerId));
+
   return (
-    <div className={className} style={{ minHeight: 340 }}>
+    <div className={cn("relative", className)} style={{ minHeight: 340 }}>
       <MapContainer
-        center={[48.8626, 2.3555]}
+        center={[48.8600, 2.3500]}
         zoom={13}
         scrollWheelZoom={true}
         style={{ height: "100%", width: "100%", borderRadius: "var(--radius)" }}
@@ -66,22 +76,47 @@ const SentinelMap = ({ className }: SentinelMapProps) => {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
           url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
         />
-        {DEMO_ZONES.map((zone) => (
+
+        {/* Zones (circles) */}
+        {filteredZones.map((zone) => (
           <Circle
             key={zone.id}
-            center={[zone.lat, zone.lng]}
+            center={zone.position}
             radius={zone.radius}
             pathOptions={{
-              color: zoneColors[zone.type],
-              fillColor: zoneFills[zone.type],
-              fillOpacity: 0.15,
-              weight: 2,
+              color: layerColorMap[zone.layerId],
+              fillColor: layerColorMap[zone.layerId],
+              fillOpacity: 0.12,
+              weight: 1.5,
             }}
           >
             <Popup>
-              <strong>{zone.name}</strong>
+              <div className="text-xs space-y-1">
+                <strong className="block text-sm">{zone.name}</strong>
+                {zone.detail && <p>{zone.detail}</p>}
+                {zone.source && (
+                  <p className="opacity-60">Source : {zone.source}</p>
+                )}
+              </div>
             </Popup>
           </Circle>
+        ))}
+
+        {/* Markers (points) */}
+        {filteredMarkers.map((marker) => (
+          <Marker
+            key={marker.id}
+            position={marker.position}
+            icon={createColoredIcon(layerColorMap[marker.layerId])}
+          >
+            <Popup>
+              <div className="text-xs space-y-1">
+                <strong className="block text-sm">{marker.name}</strong>
+                <p className="opacity-60">{marker.type}</p>
+                {marker.detail && <p>{marker.detail}</p>}
+              </div>
+            </Popup>
+          </Marker>
         ))}
       </MapContainer>
     </div>
