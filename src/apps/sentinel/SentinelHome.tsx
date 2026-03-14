@@ -93,22 +93,9 @@ const SentinelHome = () => {
           {/* Colonne gauche */}
           <div className="lg:col-span-2 space-y-6">
 
-            {/* Carte placeholder */}
-            <Card className={cn("border-dashed transition-colors duration-500", threat.borderClass)}>
-              <CardContent className="flex flex-col items-center justify-center min-h-[280px] sm:min-h-[340px] text-center p-8">
-                <div className={cn(
-                  "w-14 h-14 rounded-xl flex items-center justify-center mb-5 transition-colors duration-500",
-                  threat.badgeBg
-                )}>
-                  <Map className={cn("w-7 h-7 transition-colors duration-500", threat.textClass)} />
-                </div>
-                <p className="text-muted-foreground text-sm max-w-sm leading-relaxed">
-                  Carte des zones éclairées et points d'appui — à venir.
-                </p>
-                <p className="text-xs text-muted-foreground/60 mt-2">
-                  Cette zone accueillera la visualisation en temps réel.
-                </p>
-              </CardContent>
+            {/* Carte interactive */}
+            <Card className={cn("overflow-hidden transition-colors duration-500", threat.borderClass)}>
+              <SentinelMap className="h-[280px] sm:h-[340px]" />
             </Card>
 
             {/* Actions rapides */}
