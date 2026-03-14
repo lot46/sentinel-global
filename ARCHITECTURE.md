@@ -1,35 +1,42 @@
-# Sentinel Global Architecture
+# Sentinel Global — Architecture
 
 ## Objectif
-Ce dépôt devient le socle technique de l’écosystème Sentinel Global.
 
-Applications prévues :
+Écosystème citoyen composé de trois applications partageant un socle technique commun.
 
-- Sentinel
-- Je suis là
-- ÉCHANGEo
+## Applications
 
-## Structure cible
+| App | Chemin | Rôle |
+|-----|--------|------|
+| **Sentinel** | `/sentinel` | Surveillance citoyenne et alerte communautaire |
+| **Je suis là** | `/je-suis-la` | Signal de présence pour personnes isolées |
+| **ÉCHANGEo** | `/echangeo` | Entraide locale entre voisins |
 
-apps/
-  sentinel/
-  je-suis-la/
-  echangeo/
+## Structure
 
-packages/
-  ui/
-  auth/
-  services/
-  design-system/
+```
+src/
+├── apps/                    # Logique métier par application
+│   ├── sentinel/
+│   ├── je-suis-la/
+│   └── echangeo/
+├── packages/                # Code partagé
+│   ├── types/               # Types et constantes communes
+│   └── ui/                  # Composants UI partagés (AppShell, etc.)
+├── components/ui/           # shadcn/ui (design system de base)
+├── pages/                   # Pages globales (Index, NotFound)
+└── hooks/                   # Hooks partagés
+```
 
-infrastructure/
-  database/
-  api/
-  config/
+## Design system
+
+- Tokens CSS dans `src/index.css` (HSL)
+- Couleurs par app : `--app-sentinel`, `--app-jesuis`, `--app-echangeo`
+- Classes Tailwind : `sentinel`, `jesuis`, `echangeo`
 
 ## Règles
-- conserver une identité visuelle commune
-- mutualiser l’authentification
-- mutualiser les composants UI
-- mutualiser les services techniques
-- garder une logique métier séparée pour chaque application
+
+- Identité visuelle commune via le design system
+- Logique métier séparée par app dans `src/apps/`
+- Composants partagés dans `src/packages/ui/`
+- Authentification et services à mutualiser (à venir)
