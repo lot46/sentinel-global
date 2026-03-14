@@ -11,7 +11,7 @@ import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { cn } from "@/lib/utils";
 import type { MapLayer } from "./map-data";
-import { DEMO_ZONES, DEMO_MARKERS } from "./map-data";
+import { DEMO_ZONES, DEMO_MARKERS, filterZonesEthically, offsetPosition } from "./map-data";
 
 // Fix default icon
 delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -60,7 +60,9 @@ const SentinelMap = ({ className, layers }: SentinelMapProps) => {
     [layers]
   );
 
-  const filteredZones = DEMO_ZONES.filter((z) => visibleLayerIds.has(z.layerId));
+  // Apply ethical filtering
+  const ethicalZones = useMemo(() => filterZonesEthically(DEMO_ZONES), []);
+  const filteredZones = ethicalZones.filter((z) => visibleLayerIds.has(z.layerId));
   const filteredMarkers = DEMO_MARKERS.filter((m) => visibleLayerIds.has(m.layerId));
 
   return (
@@ -77,32 +79,40 @@ const SentinelMap = ({ className, layers }: SentinelMapProps) => {
           url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
         />
 
-        {/* Zones (circles) */}
-        {filteredZones.map((zone) => (
-          <Circle
-            key={zone.id}
-            center={zone.position}
-            radius={zone.radius}
-            pathOptions={{
-              color: layerColorMap[zone.layerId],
-              fillColor: layerColorMap[zone.layerId],
-              fillOpacity: 0.12,
-              weight: 1.5,
-            }}
-          >
-            <Popup>
-              <div className="text-xs space-y-1">
-                <strong className="block text-sm">{zone.name}</strong>
-                {zone.detail && <p>{zone.detail}</p>}
-                {zone.source && (
-                  <p className="opacity-60">Source : {zone.source}</p>
-                )}
-              </div>
-            </Popup>
-          </Circle>
-        ))}
+        {filteredZones.map((zone) => {
+          // Offset community presence positions for privacy
+          const pos = zone.layerId === "community"
+            ? offsetPosition(zone.position)
+            : zone.position;
 
-        {/* Markers (points) */}
+          return (
+            <Circle
+              key={zone.id}
+              center={pos}
+              radius={zone.radius}
+              pathOptions={{
+                color: layerColorMap[zone.layerId],
+                fillColor: layerColorMap[zone.layerId],
+                fillOpacity: 0.12,
+                weight: 1.5,
+              }}
+            >
+              <Popup>
+                <div className="text-xs space-y-1">
+                  <strong className="block text-sm">{zone.name}</strong>
+                  {zone.detail && <p>{zone.detail}</p>}
+                  {zone.expiresAt && (
+                    <p className="opacity-60">Expire le {new Date(zone.expiresAt).toLocaleDateString("fr-FR")}</p>
+                  )}
+                  {zone.source && (
+                    <p className="opacity-60">Source : {zone.source}</p>
+                  )}
+                </div>
+              </Popup>
+            </Circle>
+          );
+        })}
+
         {filteredMarkers.map((marker) => (
           <Marker
             key={marker.id}
