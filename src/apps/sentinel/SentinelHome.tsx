@@ -241,19 +241,21 @@ const SentinelHome = () => {
                     : "L-Y-A pourra vous guider selon le contexte, en fonction du niveau de vigilance et de votre situation."
                   }
                 </p>
-                <Button
-                  variant={currentLevel >= 3 ? "default" : "outline"}
-                  size="sm"
-                  className={cn(
-                    "w-full transition-colors duration-500",
-                    currentLevel >= 3
-                      ? cn(threat.textClass, "bg-current text-white hover:opacity-90")
-                      : "border-sentinel/20 hover:bg-sentinel/5"
-                  )}
-                  style={currentLevel >= 3 ? { backgroundColor: threat.color, color: "white" } : undefined}
-                >
-                  Parler à L-Y-A
-                </Button>
+                <Link to="/sentinel/lya">
+                  <Button
+                    variant={currentLevel >= 3 ? "default" : "outline"}
+                    size="sm"
+                    className={cn(
+                      "w-full transition-colors duration-500",
+                      currentLevel >= 3
+                        ? cn(threat.textClass, "bg-current text-white hover:opacity-90")
+                        : "border-sentinel/20 hover:bg-sentinel/5"
+                    )}
+                    style={currentLevel >= 3 ? { backgroundColor: threat.color, color: "white" } : undefined}
+                  >
+                    Parler à L-Y-A
+                  </Button>
+                </Link>
               </CardContent>
             </Card>
 
