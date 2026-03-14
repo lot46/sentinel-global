@@ -5,7 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
-import SentinelHome from "./apps/sentinel/SentinelHome";
+import SentinelApp from "./apps/sentinel/SentinelApp";
 import JeSuisLaHome from "./apps/je-suis-la/JeSuisLaHome";
 import EchangeoHome from "./apps/echangeo/EchangeoHome";
 
