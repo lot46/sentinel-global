@@ -14,7 +14,246 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      activity_logs: {
+        Row: {
+          action: string
+          created_at: string
+          details: Json | null
+          id: string
+          user_id: string
+        }
+        Insert: {
+          action: string
+          created_at?: string
+          details?: Json | null
+          id?: string
+          user_id: string
+        }
+        Update: {
+          action?: string
+          created_at?: string
+          details?: Json | null
+          id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      map_reports: {
+        Row: {
+          category: string
+          created_at: string
+          description: string | null
+          expires_at: string
+          id: string
+          latitude: number
+          longitude: number
+          user_id: string
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          description?: string | null
+          expires_at?: string
+          id?: string
+          latitude: number
+          longitude: number
+          user_id: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          description?: string | null
+          expires_at?: string
+          id?: string
+          latitude?: number
+          longitude?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          age_group: Database["public"]["Enums"]["age_group"]
+          avatar_url: string | null
+          created_at: string
+          display_name: string | null
+          id: string
+          is_minor: boolean | null
+          parent_consent_date: string | null
+          parent_consent_given: boolean
+          parent_user_id: string | null
+          phone: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          age_group?: Database["public"]["Enums"]["age_group"]
+          avatar_url?: string | null
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          is_minor?: boolean | null
+          parent_consent_date?: string | null
+          parent_consent_given?: boolean
+          parent_user_id?: string | null
+          phone?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          age_group?: Database["public"]["Enums"]["age_group"]
+          avatar_url?: string | null
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          is_minor?: boolean | null
+          parent_consent_date?: string | null
+          parent_consent_given?: boolean
+          parent_user_id?: string | null
+          phone?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      refuges: {
+        Row: {
+          address: string | null
+          created_at: string
+          description: string | null
+          hours: string | null
+          id: string
+          latitude: number
+          longitude: number
+          name: string
+          partner_verified: boolean
+          partner_verified_at: string | null
+          phone: string | null
+          status: Database["public"]["Enums"]["refuge_status"]
+          type: Database["public"]["Enums"]["refuge_type"]
+          updated_at: string
+        }
+        Insert: {
+          address?: string | null
+          created_at?: string
+          description?: string | null
+          hours?: string | null
+          id?: string
+          latitude: number
+          longitude: number
+          name: string
+          partner_verified?: boolean
+          partner_verified_at?: string | null
+          phone?: string | null
+          status?: Database["public"]["Enums"]["refuge_status"]
+          type: Database["public"]["Enums"]["refuge_type"]
+          updated_at?: string
+        }
+        Update: {
+          address?: string | null
+          created_at?: string
+          description?: string | null
+          hours?: string | null
+          id?: string
+          latitude?: number
+          longitude?: number
+          name?: string
+          partner_verified?: boolean
+          partner_verified_at?: string | null
+          phone?: string | null
+          status?: Database["public"]["Enums"]["refuge_status"]
+          type?: Database["public"]["Enums"]["refuge_type"]
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      sos_events: {
+        Row: {
+          cancellation_reason: string | null
+          cancelled_at: string | null
+          contacts_notified: boolean
+          created_at: string
+          id: string
+          latitude: number | null
+          longitude: number | null
+          notes: string | null
+          resolved_at: string | null
+          status: Database["public"]["Enums"]["sos_status"]
+          threat_level: number
+          triggered_at: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          cancellation_reason?: string | null
+          cancelled_at?: string | null
+          contacts_notified?: boolean
+          created_at?: string
+          id?: string
+          latitude?: number | null
+          longitude?: number | null
+          notes?: string | null
+          resolved_at?: string | null
+          status?: Database["public"]["Enums"]["sos_status"]
+          threat_level?: number
+          triggered_at?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          cancellation_reason?: string | null
+          cancelled_at?: string | null
+          contacts_notified?: boolean
+          created_at?: string
+          id?: string
+          latitude?: number | null
+          longitude?: number | null
+          notes?: string | null
+          resolved_at?: string | null
+          status?: Database["public"]["Enums"]["sos_status"]
+          threat_level?: number
+          triggered_at?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      trusted_contacts: {
+        Row: {
+          created_at: string
+          email: string | null
+          id: string
+          is_verified: boolean
+          name: string
+          phone: string | null
+          relationship: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          id?: string
+          is_verified?: boolean
+          name: string
+          phone?: string | null
+          relationship?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          id?: string
+          is_verified?: boolean
+          name?: string
+          phone?: string | null
+          relationship?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -23,7 +262,10 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      age_group: "6-9" | "10-13" | "14-17" | "adult"
+      refuge_status: "active" | "inactive" | "suspended"
+      refuge_type: "fixed" | "mobile" | "support-point"
+      sos_status: "armed" | "countdown" | "active" | "cancelled" | "resolved"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +392,11 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      age_group: ["6-9", "10-13", "14-17", "adult"],
+      refuge_status: ["active", "inactive", "suspended"],
+      refuge_type: ["fixed", "mobile", "support-point"],
+      sos_status: ["armed", "countdown", "active", "cancelled", "resolved"],
+    },
   },
 } as const
