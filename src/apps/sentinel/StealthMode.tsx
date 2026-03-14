@@ -96,9 +96,9 @@ const StealthMode = ({ enabled, onSOSTriggered, onExit }: StealthModeProps) => {
         }, 1000);
         return;
       }
-      // Simple calc display
+      // Secure math parser — no eval/Function
       try {
-        const result = Function('"use strict"; return (' + display + ')')();
+        const result = safeEvaluate(display);
         setDisplay(String(result));
       } catch {
         setDisplay("Erreur");

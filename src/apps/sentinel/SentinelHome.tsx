@@ -60,11 +60,14 @@ const SentinelHome = () => {
           <span className={cn("font-medium", threat.textClass)}>Niveau {threat.level}</span>
           <span className="text-muted-foreground hidden sm:inline">— {threat.label}</span>
         </div>
-        <div className="flex items-center gap-1">
-          <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => setCurrentLevel((l) => Math.max(1, l - 1))} disabled={currentLevel <= 1}>
+        <div className="flex items-center gap-2">
+          <Badge variant="outline" className="text-[10px] font-normal border-muted-foreground/30 text-muted-foreground">
+            Mode démo
+          </Badge>
+          <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => setCurrentLevel((l) => Math.max(1, l - 1))} disabled={currentLevel <= 1} aria-label="Diminuer le niveau de vigilance">
             <ChevronDown className="w-4 h-4" />
           </Button>
-          <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => setCurrentLevel((l) => Math.min(4, l + 1))} disabled={currentLevel >= 4}>
+          <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => setCurrentLevel((l) => Math.min(4, l + 1))} disabled={currentLevel >= 4} aria-label="Augmenter le niveau de vigilance">
             <ChevronUp className="w-4 h-4" />
           </Button>
         </div>
