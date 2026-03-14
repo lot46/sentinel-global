@@ -116,10 +116,11 @@ const SentinelSOS = () => {
                     size="lg"
                     className="bg-level4 hover:bg-level4/90 text-white"
                     onClick={trigger}
+                    aria-label="Confirmer le déclenchement du SOS"
                   >
                     Confirmer le SOS
                   </Button>
-                  <Button variant="outline" size="lg" onClick={reset}>
+                  <Button variant="outline" size="lg" onClick={reset} aria-label="Annuler le SOS">
                     <X className="w-4 h-4 mr-2" />
                     Annuler
                   </Button>
