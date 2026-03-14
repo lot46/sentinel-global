@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import AppShell from "@/packages/ui/AppShell";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -131,19 +132,21 @@ const SentinelHome = () => {
                     <HandHelping className="w-5 h-5 text-level2" />
                     J'ai besoin d'un appui
                   </Button>
-                  <Button
-                    variant="outline"
-                    className={cn(
-                      "h-auto py-4 flex flex-col gap-2 text-sm font-medium hover:bg-level4/5 hover:border-level4/30",
-                      currentLevel >= 3 && "border-level4/30 bg-level4/5"
-                    )}
-                  >
-                    <AlertTriangle className={cn(
-                      "w-5 h-5 text-level4",
-                      currentLevel >= 3 && "animate-pulse"
-                    )} />
-                    Préparer un SOS
-                  </Button>
+                  <Link to="/sentinel/sos">
+                    <Button
+                      variant="outline"
+                      className={cn(
+                        "h-auto py-4 flex flex-col gap-2 text-sm font-medium hover:bg-level4/5 hover:border-level4/30 w-full",
+                        currentLevel >= 3 && "border-level4/30 bg-level4/5"
+                      )}
+                    >
+                      <AlertTriangle className={cn(
+                        "w-5 h-5 text-level4",
+                        currentLevel >= 3 && "animate-pulse"
+                      )} />
+                      Préparer un SOS
+                    </Button>
+                  </Link>
                 </div>
               </CardContent>
             </Card>
@@ -238,19 +241,21 @@ const SentinelHome = () => {
                     : "L-Y-A pourra vous guider selon le contexte, en fonction du niveau de vigilance et de votre situation."
                   }
                 </p>
-                <Button
-                  variant={currentLevel >= 3 ? "default" : "outline"}
-                  size="sm"
-                  className={cn(
-                    "w-full transition-colors duration-500",
-                    currentLevel >= 3
-                      ? cn(threat.textClass, "bg-current text-white hover:opacity-90")
-                      : "border-sentinel/20 hover:bg-sentinel/5"
-                  )}
-                  style={currentLevel >= 3 ? { backgroundColor: threat.color, color: "white" } : undefined}
-                >
-                  Parler à L-Y-A
-                </Button>
+                <Link to="/sentinel/lya">
+                  <Button
+                    variant={currentLevel >= 3 ? "default" : "outline"}
+                    size="sm"
+                    className={cn(
+                      "w-full transition-colors duration-500",
+                      currentLevel >= 3
+                        ? cn(threat.textClass, "bg-current text-white hover:opacity-90")
+                        : "border-sentinel/20 hover:bg-sentinel/5"
+                    )}
+                    style={currentLevel >= 3 ? { backgroundColor: threat.color, color: "white" } : undefined}
+                  >
+                    Parler à L-Y-A
+                  </Button>
+                </Link>
               </CardContent>
             </Card>
 
@@ -267,6 +272,12 @@ const SentinelHome = () => {
                   Sentinel ne promet pas de tout contrôler. Sentinel aide à mieux voir,
                   mieux comprendre et mieux réagir — ensemble.
                 </p>
+                <Link
+                  to="/sentinel/charte"
+                  className="inline-block text-xs text-sentinel hover:underline mt-1"
+                >
+                  Lire la charte complète →
+                </Link>
               </CardContent>
             </Card>
           </div>
