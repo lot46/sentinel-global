@@ -1,3 +1,4 @@
+import { useState } from "react";
 import AppShell from "@/packages/ui/AppShell";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -12,7 +13,11 @@ import {
   Activity,
   Clock,
   Heart,
+  ChevronUp,
+  ChevronDown,
 } from "lucide-react";
+import { THREAT_LEVELS, getThreatLevel } from "./threat-levels";
+import { cn } from "@/lib/utils";
 
 const activityLog = [
   { time: "14:32", label: "Signal de sécurité enregistré", icon: ShieldCheck },
@@ -21,15 +26,56 @@ const activityLog = [
 ];
 
 const SentinelHome = () => {
+  const [currentLevel, setCurrentLevel] = useState(1);
+  const threat = getThreatLevel(currentLevel);
+
   return (
     <AppShell appName="Sentinel">
+      {/* Bande de niveau en haut */}
+      <div
+        className={cn(
+          "border-b px-4 sm:px-6 py-2 flex items-center justify-between text-sm transition-colors duration-500",
+          threat.bgClass,
+          threat.borderClass
+        )}
+      >
+        <div className="flex items-center gap-2">
+          <span className={cn("inline-block w-2 h-2 rounded-full animate-pulse", threat.textClass, threat.badgeBg)} 
+            style={{ backgroundColor: threat.color }} />
+          <span className={cn("font-medium", threat.textClass)}>
+            Niveau {threat.level}
+          </span>
+          <span className="text-muted-foreground hidden sm:inline">— {threat.label}</span>
+        </div>
+        <div className="flex items-center gap-1">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-7 w-7"
+            onClick={() => setCurrentLevel((l) => Math.max(1, l - 1))}
+            disabled={currentLevel <= 1}
+          >
+            <ChevronDown className="w-4 h-4" />
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-7 w-7"
+            onClick={() => setCurrentLevel((l) => Math.min(4, l + 1))}
+            disabled={currentLevel >= 4}
+          >
+            <ChevronUp className="w-4 h-4" />
+          </Button>
+        </div>
+      </div>
+
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 space-y-8">
 
-        {/* 1. En-tête */}
+        {/* En-tête */}
         <header className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
           <div className="space-y-1">
             <div className="flex items-center gap-3">
-              <Shield className="w-7 h-7 text-sentinel" />
+              <Shield className={cn("w-7 h-7 transition-colors duration-500", threat.textClass)} />
               <h1 className="text-2xl font-bold tracking-tight">Sentinel</h1>
             </div>
             <p className="text-muted-foreground text-sm leading-relaxed max-w-md">
@@ -41,17 +87,19 @@ const SentinelHome = () => {
           </Button>
         </header>
 
-        {/* Grille principale */}
         <div className="grid gap-6 lg:grid-cols-3">
 
-          {/* Colonne gauche — 2/3 */}
+          {/* Colonne gauche */}
           <div className="lg:col-span-2 space-y-6">
 
-            {/* 2. Carte / Zone principale */}
-            <Card className="border-dashed">
+            {/* Carte placeholder */}
+            <Card className={cn("border-dashed transition-colors duration-500", threat.borderClass)}>
               <CardContent className="flex flex-col items-center justify-center min-h-[280px] sm:min-h-[340px] text-center p-8">
-                <div className="w-14 h-14 rounded-xl bg-sentinel/10 flex items-center justify-center mb-5">
-                  <Map className="w-7 h-7 text-sentinel" />
+                <div className={cn(
+                  "w-14 h-14 rounded-xl flex items-center justify-center mb-5 transition-colors duration-500",
+                  threat.badgeBg
+                )}>
+                  <Map className={cn("w-7 h-7 transition-colors duration-500", threat.textClass)} />
                 </div>
                 <p className="text-muted-foreground text-sm max-w-sm leading-relaxed">
                   Carte des zones éclairées et points d'appui — à venir.
@@ -62,7 +110,7 @@ const SentinelHome = () => {
               </CardContent>
             </Card>
 
-            {/* 4. Actions rapides */}
+            {/* Actions rapides */}
             <Card>
               <CardHeader className="pb-3">
                 <CardTitle className="text-base font-semibold">Actions rapides</CardTitle>
@@ -78,23 +126,29 @@ const SentinelHome = () => {
                   </Button>
                   <Button
                     variant="outline"
-                    className="h-auto py-4 flex flex-col gap-2 text-sm font-medium hover:bg-amber-500/5 hover:border-amber-500/30"
+                    className="h-auto py-4 flex flex-col gap-2 text-sm font-medium hover:bg-level2/5 hover:border-level2/30"
                   >
-                    <HandHelping className="w-5 h-5 text-amber-600" />
+                    <HandHelping className="w-5 h-5 text-level2" />
                     J'ai besoin d'un appui
                   </Button>
                   <Button
                     variant="outline"
-                    className="h-auto py-4 flex flex-col gap-2 text-sm font-medium hover:bg-destructive/5 hover:border-destructive/30"
+                    className={cn(
+                      "h-auto py-4 flex flex-col gap-2 text-sm font-medium hover:bg-level4/5 hover:border-level4/30",
+                      currentLevel >= 3 && "border-level4/30 bg-level4/5"
+                    )}
                   >
-                    <AlertTriangle className="w-5 h-5 text-destructive" />
+                    <AlertTriangle className={cn(
+                      "w-5 h-5 text-level4",
+                      currentLevel >= 3 && "animate-pulse"
+                    )} />
                     Préparer un SOS
                   </Button>
                 </div>
               </CardContent>
             </Card>
 
-            {/* 6. Historique */}
+            {/* Historique */}
             <Card>
               <CardHeader className="pb-3">
                 <CardTitle className="text-base font-semibold">Activité récente</CardTitle>
@@ -118,55 +172,89 @@ const SentinelHome = () => {
             </Card>
           </div>
 
-          {/* Colonne droite — 1/3 */}
+          {/* Colonne droite */}
           <div className="space-y-6">
 
-            {/* 3. État actuel */}
-            <Card>
+            {/* État actuel */}
+            <Card className={cn("transition-colors duration-500", threat.borderClass)}>
               <CardHeader className="pb-3">
                 <CardTitle className="text-base font-semibold">État actuel</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-3">
+              <CardContent className="space-y-4">
                 <div className="flex items-center gap-3">
                   <Badge
                     variant="outline"
-                    className="border-sentinel/30 bg-sentinel/5 text-sentinel font-semibold px-3 py-1"
+                    className={cn(
+                      "font-semibold px-3 py-1 transition-colors duration-500",
+                      threat.borderClass,
+                      threat.bgClass,
+                      threat.textClass
+                    )}
                   >
-                    Niveau 1
+                    Niveau {threat.level}
                   </Badge>
-                  <span className="text-sm text-muted-foreground">Situation calme</span>
+                  <span className="text-sm text-muted-foreground">{threat.label}</span>
                 </div>
                 <p className="text-xs text-muted-foreground leading-relaxed">
-                  Aucun signal particulier détecté dans votre périmètre. Restez attentif, 
-                  Sentinel veille avec vous.
+                  {threat.description}
                 </p>
+
+                {/* Indicateur visuel des 4 niveaux */}
+                <div className="flex gap-1.5 pt-1">
+                  {THREAT_LEVELS.map((tl) => (
+                    <button
+                      key={tl.level}
+                      onClick={() => setCurrentLevel(tl.level)}
+                      className={cn(
+                        "flex-1 h-2 rounded-full transition-all duration-500 cursor-pointer",
+                        currentLevel >= tl.level
+                          ? "opacity-100"
+                          : "opacity-20"
+                      )}
+                      style={{ backgroundColor: tl.color }}
+                      title={`Niveau ${tl.level} — ${tl.label}`}
+                    />
+                  ))}
+                </div>
               </CardContent>
             </Card>
 
-            {/* 5. L-Y-A */}
-            <Card className="border-sentinel/20 bg-sentinel/[0.02]">
+            {/* L-Y-A */}
+            <Card className={cn(
+              "transition-colors duration-500",
+              threat.borderClass,
+              currentLevel >= 3 ? threat.bgClass : "bg-sentinel/[0.02]"
+            )}>
               <CardHeader className="pb-3">
                 <CardTitle className="text-base font-semibold flex items-center gap-2">
-                  <MessageCircle className="w-4 h-4 text-sentinel" />
+                  <MessageCircle className={cn("w-4 h-4 transition-colors duration-500", threat.textClass)} />
                   L-Y-A
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <p className="text-sm text-muted-foreground leading-relaxed">
-                  L-Y-A pourra vous guider selon le contexte, en fonction du niveau 
-                  de vigilance et de votre situation.
+                  {currentLevel >= 3
+                    ? "L-Y-A est prêt à vous assister. Activez-le pour obtenir un guidage adapté à la situation."
+                    : "L-Y-A pourra vous guider selon le contexte, en fonction du niveau de vigilance et de votre situation."
+                  }
                 </p>
                 <Button
-                  variant="outline"
+                  variant={currentLevel >= 3 ? "default" : "outline"}
                   size="sm"
-                  className="w-full border-sentinel/20 hover:bg-sentinel/5"
+                  className={cn(
+                    "w-full transition-colors duration-500",
+                    currentLevel >= 3
+                      ? cn(threat.textClass, "bg-current text-white hover:opacity-90")
+                      : "border-sentinel/20 hover:bg-sentinel/5"
+                  )}
+                  style={currentLevel >= 3 ? { backgroundColor: threat.color, color: "white" } : undefined}
                 >
                   Parler à L-Y-A
                 </Button>
               </CardContent>
             </Card>
 
-            {/* 7. Philosophie */}
+            {/* Philosophie */}
             <Card className="bg-muted/50">
               <CardContent className="pt-5 space-y-3">
                 <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
@@ -176,7 +264,7 @@ const SentinelHome = () => {
                   Honnêteté. Loyauté. Transparence. Anticipation.
                 </p>
                 <p className="text-xs text-muted-foreground/70 leading-relaxed">
-                  Sentinel ne promet pas de tout contrôler. Sentinel aide à mieux voir, 
+                  Sentinel ne promet pas de tout contrôler. Sentinel aide à mieux voir,
                   mieux comprendre et mieux réagir — ensemble.
                 </p>
               </CardContent>
