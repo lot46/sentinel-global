@@ -11,7 +11,7 @@ import {
   HandHelping,
   AlertTriangle,
   MessageCircle,
-  Map,
+  
   Activity,
   Clock,
   Heart,
