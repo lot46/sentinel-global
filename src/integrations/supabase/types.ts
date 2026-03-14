@@ -38,6 +38,39 @@ export type Database = {
         }
         Relationships: []
       }
+      coffre_entries: {
+        Row: {
+          content: string
+          created_at: string
+          emoji: string | null
+          id: string
+          mode: string
+          sensitivity_level: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          emoji?: string | null
+          id?: string
+          mode?: string
+          sensitivity_level?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          emoji?: string | null
+          id?: string
+          mode?: string
+          sensitivity_level?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       map_reports: {
         Row: {
           category: string
