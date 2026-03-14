@@ -81,6 +81,7 @@ const SentinelSOS = () => {
                     variant="outline"
                     className="border-level4/30 hover:bg-level4/5 hover:border-level4/50"
                     onClick={arm}
+                    aria-label="Préparer un signal SOS"
                   >
                     <AlertTriangle className="w-4 h-4 mr-2 text-level4" />
                     Préparer un SOS
