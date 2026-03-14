@@ -59,6 +59,16 @@ export default {
           DEFAULT: "hsl(var(--app-echangeo))",
           foreground: "hsl(0 0% 100%)",
         },
+        level2: {
+          DEFAULT: "hsl(var(--level-2))",
+        },
+        level3: {
+          DEFAULT: "hsl(var(--level-3))",
+        },
+        level4: {
+          DEFAULT: "hsl(var(--level-4))",
+          foreground: "hsl(0 0% 100%)",
+        },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",
