@@ -273,12 +273,20 @@ const SentinelHome = () => {
                   Sentinel ne promet pas de tout contrôler. Sentinel aide à mieux voir,
                   mieux comprendre et mieux réagir — ensemble.
                 </p>
-                <Link
-                  to="/sentinel/charte"
-                  className="inline-block text-xs text-sentinel hover:underline mt-1"
-                >
-                  Lire la charte complète →
-                </Link>
+                <div className="flex gap-3 mt-1">
+                  <Link
+                    to="/sentinel/charte"
+                    className="text-xs text-sentinel hover:underline"
+                  >
+                    Charte complète →
+                  </Link>
+                  <Link
+                    to="/sentinel/transparence"
+                    className="text-xs text-sentinel hover:underline"
+                  >
+                    Transparence →
+                  </Link>
+                </div>
               </CardContent>
             </Card>
           </div>
