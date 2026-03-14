@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { AuthProvider } from "@/contexts/AuthContext";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 
@@ -19,15 +20,17 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <Suspense fallback={<div className="flex items-center justify-center min-h-screen"><div className="w-6 h-6 border-2 border-muted-foreground/30 border-t-foreground rounded-full animate-spin" /></div>}>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/sentinel/*" element={<SentinelApp />} />
-            <Route path="/je-suis-la/*" element={<JeSuisLaHome />} />
-            <Route path="/echangeo/*" element={<EchangeoHome />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </Suspense>
+        <AuthProvider>
+          <Suspense fallback={<div className="flex items-center justify-center min-h-screen"><div className="w-6 h-6 border-2 border-muted-foreground/30 border-t-foreground rounded-full animate-spin" /></div>}>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/sentinel/*" element={<SentinelApp />} />
+              <Route path="/je-suis-la/*" element={<JeSuisLaHome />} />
+              <Route path="/echangeo/*" element={<EchangeoHome />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </Suspense>
+        </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
