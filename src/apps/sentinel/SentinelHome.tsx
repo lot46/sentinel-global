@@ -132,19 +132,21 @@ const SentinelHome = () => {
                     <HandHelping className="w-5 h-5 text-level2" />
                     J'ai besoin d'un appui
                   </Button>
-                  <Button
-                    variant="outline"
-                    className={cn(
-                      "h-auto py-4 flex flex-col gap-2 text-sm font-medium hover:bg-level4/5 hover:border-level4/30",
-                      currentLevel >= 3 && "border-level4/30 bg-level4/5"
-                    )}
-                  >
-                    <AlertTriangle className={cn(
-                      "w-5 h-5 text-level4",
-                      currentLevel >= 3 && "animate-pulse"
-                    )} />
-                    Préparer un SOS
-                  </Button>
+                  <Link to="/sentinel/sos">
+                    <Button
+                      variant="outline"
+                      className={cn(
+                        "h-auto py-4 flex flex-col gap-2 text-sm font-medium hover:bg-level4/5 hover:border-level4/30 w-full",
+                        currentLevel >= 3 && "border-level4/30 bg-level4/5"
+                      )}
+                    >
+                      <AlertTriangle className={cn(
+                        "w-5 h-5 text-level4",
+                        currentLevel >= 3 && "animate-pulse"
+                      )} />
+                      Préparer un SOS
+                    </Button>
+                  </Link>
                 </div>
               </CardContent>
             </Card>
