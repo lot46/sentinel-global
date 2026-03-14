@@ -6,6 +6,8 @@ const SentinelCharte = lazy(() => import("./SentinelCharte"));
 const SentinelSOS = lazy(() => import("./SentinelSOS"));
 const SentinelLYA = lazy(() => import("./SentinelLYA"));
 const SentinelTransparence = lazy(() => import("./SentinelTransparence"));
+const SentinelAuth = lazy(() => import("./SentinelAuth"));
+const TrustedContacts = lazy(() => import("./TrustedContacts"));
 
 const Loading = () => (
   <div className="flex items-center justify-center min-h-[60vh]">
@@ -21,6 +23,8 @@ const SentinelApp = () => (
       <Route path="sos" element={<SentinelSOS />} />
       <Route path="lya" element={<SentinelLYA />} />
       <Route path="transparence" element={<SentinelTransparence />} />
+      <Route path="auth" element={<SentinelAuth />} />
+      <Route path="contacts" element={<TrustedContacts />} />
     </Routes>
   </Suspense>
 );
