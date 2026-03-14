@@ -32,7 +32,14 @@ const activityLog = [
 
 const SentinelHome = () => {
   const [currentLevel, setCurrentLevel] = useState(1);
+  const [mapLayers, setMapLayers] = useState<MapLayer[]>(MAP_LAYERS);
   const threat = getThreatLevel(currentLevel);
+
+  const toggleLayer = (layerId: string) => {
+    setMapLayers((prev) =>
+      prev.map((l) => (l.id === layerId ? { ...l, visible: !l.visible } : l))
+    );
+  };
 
   return (
     <AppShell appName="Sentinel">
