@@ -1,5 +1,8 @@
-import { Link } from "react-router-dom";
+import { lazy, Suspense } from "react";
+import { Link, useLocation } from "react-router-dom";
 import type { ReactNode } from "react";
+
+const LyaAvatar = lazy(() => import("@/apps/sentinel/LyaAvatar"));
 
 interface AppShellProps {
   appName: string;
@@ -8,6 +11,9 @@ interface AppShellProps {
 }
 
 const AppShell = ({ appName, children, accentVar }: AppShellProps) => {
+  const location = useLocation();
+  const isSentinel = location.pathname.startsWith("/sentinel");
+
   return (
     <div className="min-h-screen flex flex-col bg-background text-foreground">
       <header className="border-b border-border px-6 py-4 flex items-center justify-between">
@@ -26,6 +32,13 @@ const AppShell = ({ appName, children, accentVar }: AppShellProps) => {
       <footer className="border-t border-border px-6 py-4 text-xs text-muted-foreground">
         Sentinel Global — Écosystème citoyen
       </footer>
+
+      {/* L-Y-A floating avatar on all Sentinel pages */}
+      {isSentinel && (
+        <Suspense fallback={null}>
+          <LyaAvatar />
+        </Suspense>
+      )}
     </div>
   );
 };
