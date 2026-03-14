@@ -14,7 +14,7 @@ export const APPS: AppDefinition[] = [
     id: "sentinel",
     name: "Sentinel",
     slug: "sentinel",
-    description: "Surveillance citoyenne et alerte communautaire",
+    description: "Protection citoyenne et anticipation communautaire",
     path: "/sentinel",
     color: "hsl(var(--app-sentinel))",
   },
