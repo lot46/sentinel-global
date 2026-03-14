@@ -2,6 +2,9 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import AppShell from "@/packages/ui/AppShell";
 import SentinelMap from "./SentinelMap";
+import MapLayerPanel from "./MapLayerPanel";
+import { MAP_LAYERS } from "./map-data";
+import type { MapLayer } from "./map-data";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -29,7 +32,14 @@ const activityLog = [
 
 const SentinelHome = () => {
   const [currentLevel, setCurrentLevel] = useState(1);
+  const [mapLayers, setMapLayers] = useState<MapLayer[]>(MAP_LAYERS);
   const threat = getThreatLevel(currentLevel);
+
+  const toggleLayer = (layerId: string) => {
+    setMapLayers((prev) =>
+      prev.map((l) => (l.id === layerId ? { ...l, visible: !l.visible } : l))
+    );
+  };
 
   return (
     <AppShell appName="Sentinel">
@@ -96,8 +106,11 @@ const SentinelHome = () => {
 
             {/* Carte interactive */}
             <Card className={cn("overflow-hidden transition-colors duration-500", threat.borderClass)}>
-              <SentinelMap className="h-[280px] sm:h-[340px]" />
+              <SentinelMap className="h-[280px] sm:h-[400px]" layers={mapLayers} />
             </Card>
+
+            {/* Panneau de couches */}
+            <MapLayerPanel layers={mapLayers} onToggle={toggleLayer} />
 
             {/* Actions rapides */}
             <Card>
