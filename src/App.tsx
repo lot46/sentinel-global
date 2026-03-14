@@ -19,7 +19,7 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
-          <Route path="/sentinel/*" element={<SentinelHome />} />
+          <Route path="/sentinel/*" element={<SentinelApp />} />
           <Route path="/je-suis-la/*" element={<JeSuisLaHome />} />
           <Route path="/echangeo/*" element={<EchangeoHome />} />
           <Route path="*" element={<NotFound />} />
